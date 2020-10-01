@@ -9,16 +9,24 @@ if __name__ == "__main__":
 	parser.add_argument("-i", "--ipaddress", help = "IP Address To Track")
 	args = parser.parse_args()
 	ip = args.ipaddress							#taking IP address
-	url = "http://ip-api.com/json/"+ ip					#appending IP to domain
-	response = requests.get(url)						#getting Response of the Query
-	data = json.loads(response.content)					#Getting useful data from the response that we get
-	
-	print("\t[+] IP \t", data["query"])					#
-	print("\t[+] CITY \t", data["city"])					#
-	print("\t[+] ISP \t", data["isp"])					#
-	print("\t[+] LOC \t", data["country"])					#	
-	print("\t[+] REG \t", data["regionName"])				#     printing required data about given IP Address
-	print("\t[+] TIME \t", data["timezone"])				#
-	print("\t[+] ZIP \t", data["zip"])					#
-	print("\t[+] LAT \t", data["lat"])					#
-	print("\t[+] LON \t", data["lon"])					#
+	data = {}
+	if ip is None:
+		print("Please provide IP ")
+	else:
+		url = "http://ip-api.com/json/"+ ip					#appending IP to domain
+		try:
+			response = requests.get(url)						#getting Response of the Query
+			data = json.loads(response.content)					#Getting useful data from the response that we get
+		except Exception as api_exception:
+			print(f"Failed to get {ip} information")
+			print(f"Detailed Error: {api_exception}")
+			
+		print("\t[+] IP \t", data.get("query"))					#
+		print("\t[+] CITY \t", data.get("city"))				#
+		print("\t[+] ISP \t", data.get("isp"))					#
+		print("\t[+] LOC \t", data.get("country"))				#	
+		print("\t[+] REG \t", data.get("regionName"))				#     printing required data about given IP Address
+		print("\t[+] TIME \t", data.get("timezone"))				#
+		print("\t[+] ZIP \t", data.get("zip"))					#
+		print("\t[+] LAT \t", data.get("lat"))					#
+		print("\t[+] LON \t", data.get("lon"))					#
